@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pusat Informasi & Siaga Karhutla Indonesia</title>
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #ff6b00;
+            --primary-glow: rgba(255, 107, 0, 0.35);
+            --danger: #ff3333;
+            --warning: #ffaa00;
+            --success: #00e676;
+            --bg-deep: #050b14;
+            --card-bg: rgba(13, 22, 38, 0.85);
+            --border-neon: rgba(255, 107, 0, 0.25);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg-deep);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(255, 107, 0, 0.1) 0px, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(255, 51, 51, 0.1) 0px, transparent 45%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-neon);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .logo-area h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b00, #ff3333);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-area p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .status-badge {
+            background: rgba(255, 51, 51, 0.15);
+            border: 1px solid var(--danger);
+            color: #ff9999;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.2);
+        }
+
+        .blink-dot {
+            width: 10px; height: 10px;
+            background: var(--danger); border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.4); }
+        }
+
+        /* NAVIGATION TABS */
+        .nav-tabs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .tab-btn {
+            padding: 14px 18px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-neon);
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--danger));
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 6px 20px var(--primary-glow);
+        }
+
+        .tab-pane { display: none; animation: fadeIn 0.4s ease; }
+        .tab-pane.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* INFO CARDS / METRICS */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .info-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-neon);
+            border-radius: 16px;
+            padding: 22px;
+            position: relative;
+        }
+
+        .info-card .icon-box {
+            width: 44px; height: 44px; background: rgba(255,107,0,0.15);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            color: var(--primary); font-size: 18px; margin-bottom: 14px;
+        }
+
+        .info-card p {
+            font-size: 12px; color: var(--text-muted); font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;
+        }
+
+        .info-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px; font-weight: 700; color: #fff;
+        }
+
+        /* MAIN SECTION PANELS */
+        .panel {
+            background: var(--card-bg);
+            border: 1px solid var(--border-neon);
+            border-radius: 20px;
+            padding: 26px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .panel h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* MAP SECTION */
+        .map-wrapper {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        @media(max-width: 900px) { .map-wrapper { grid-template-columns: 1fr; } }
+
+        .interactive-map {
+            width: 100%; height: 400px;
+            background: radial-gradient(circle, #0c1830 0%, #03060d 100%);
+            border-radius: 14px; border: 1px solid rgba(255,255,255,0.08);
+            position: relative; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        svg.map-svg path {
+            fill: #142138;
+            stroke: rgba(255,107,0,0.3);
+            stroke-width: 1.5;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        svg.map-svg path:hover { fill: #1d3054; stroke: var(--primary); }
+
+        .map-pin {
+            position: absolute;
+            width: 16px; height: 16px; background: var(--danger);
+            border-radius: 50%; cursor: pointer; transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px var(--danger);
+        }
+        .map-pin::after {
+            content: ''; position: absolute; top: -8px; left: -8px;
+            width: 32px; height: 32px; border: 2px solid var(--danger);
+            border-radius: 50%; animation: sonar 2s infinite ease-out;
+        }
+        @keyframes sonar {
+            0% { transform: scale(0.4); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        .region-box {
+            background: rgba(5, 11, 20, 0.8);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px; padding: 18px; margin-top: 14px;
+        }
+
+        /* EDUKASI GRID */
+        .edu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+        }
+        .edu-box {
+            background: rgba(5, 11, 20, 0.6);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px; padding: 20px;
+        }
+        .edu-box h4 { font-size: 15px; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .edu-box p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+        /* SIMULATOR / KALKULATOR */
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media(max-width: 768px) { .sim-grid { grid-template-columns: 1fr; } }
+
+        .form-label { font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 8px; font-weight: 600; }
+        .form-input {
+            width: 100%; padding: 14px; background: #050b14;
+            border: 1px solid var(--border-neon); border-radius: 12px; color: #fff;
+            margin-bottom: 16px; font-size: 14px; outline: none;
+        }
+        .form-input:focus { border-color: var(--primary); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--danger));
+            color: #fff; border: none; padding: 14px; border-radius: 12px;
+            font-weight: 700; cursor: pointer; width: 100%; font-size: 14px;
+            box-shadow: 0 6px 20px var(--primary-glow); transition: 0.3s;
+        }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        .result-box {
+            background: rgba(5, 11, 20, 0.8);
+            border: 1px solid var(--border-neon);
+            border-radius: 16px; padding: 24px;
+            display: flex; flex-direction: column; justify-content: center; text-align: center;
+        }
+
+        /* LAPORAN WARGA */
+        .report-list { max-height: 220px; overflow-y: auto; margin-top: 16px; padding-right: 6px; }
+        .report-item {
+            background: rgba(5, 11, 20, 0.6); border-left: 4px solid var(--primary);
+            padding: 12px 16px; border-radius: 10px; margin-bottom: 10px; font-size: 13px;
+        }
+        .report-item strong { color: #fff; display: block; margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <div class="logo-area">
+                <h1><i class="fa-solid fa-shield-halved" style="color: var(--primary);"></i> SIAGA KARHUTLA INDONESIA</h1>
+                <p>Pusat Informasi Kebakaran Hutan, Kualitas Udara, & Edukasi Masyarakat</p>
+            </div>
+            <div class="status-badge">
+                <div class="blink-dot"></div> STATUS: SIAGA DARURAT
+            </div>
+        </header>
+
+        <!-- NAVIGATION TABS -->
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('peta')"><i class="fa-solid fa-earth-asia"></i> Peta Sebaran</button>
+            <button class="tab-btn" onclick="switchTab('edukasi')"><i class="fa-solid fa-book-open"></i> Kenali Karhutla</button>
+            <button class="tab-btn" onclick="switchTab('simulasi')"><i class="fa-solid fa-lungs"></i> Cek Risiko Udara</button>
+            <button class="tab-btn" onclick="switchTab('lapor')"><i class="fa-solid fa-bullhorn"></i> Lapor Titik Api</button>
+        </div>
+
+        <!-- QUICK METRICS -->
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="icon-box"><i class="fa-solid fa-fire-flame-curved"></i></div>
+                <p>Total Titik Panas Aktif</p>
+                <h3>2,150 Titik</h3>
+            </div>
+            <div class="info-card">
+                <div class="icon-box"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <p>Wilayah Paling Terdampak</p>
+                <h3 style="font-size: 20px; margin-top: 4px;">Kalimantan & Sumatra</h3>
+            </div>
+            <div class="info-card">
+                <div class="icon-box"><i class="fa-solid fa-wind"></i></div>
+                <p>Rata-rata Kualitas Udara</p>
+                <h3 style="color: var(--warning); font-size: 22px;">Tidak Sehat (194)</h3>
+            </div>
+        </div>
+
+        <!-- ================= TAB 1: PETA SEBARAN ================= -->
+        <div class="tab-pane active" id="tab-peta">
+            <div class="panel">
+                <h2><i class="fa-solid fa-map-location-dot" style="color: var(--primary);"></i> Peta Interaktif Titik Rawan Kebakaran</h2>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 18px;">
+                    Klik titik merah pada peta di bawah untuk melihat informasi rinci mengenai kondisi wilayah yang terpantau satelit.
+                </p>
+
+                <div class="map-wrapper">
+                    <div class="interactive-map">
+                        <!-- SVG Peta Indonesia -->
+                        <svg class="map-svg" viewBox="0 0 1000 450" width="95%" height="95%">
+                            <!-- Sumatera -->
+                            <path d="M 120,90 L 210,170 L 310,270 L 270,310 L 180,230 L 95,130 Z" />
+                            <!-- Jawa -->
+                            <path d="M 280,330 L 440,345 L 510,355 L 500,375 L 350,360 L 270,345 Z" />
+                            <!-- Kalimantan -->
+                            <path d="M 350,110 L 470,95 L 530,155 L 500,250 L 415,270 L 340,200 Z" />
+                            <!-- Sulawesi -->
+                            <path d="M 570,140 L 620,130 L 630,200 L 590,210 L 610,260 L 560,250 L 570,190 Z" />
+                            <!-- Papua -->
+                            <path d="M 770,170 L 910,150 L 940,230 L 870,290 L 780,250 Z" />
+                        </svg>
+
+                        <!-- Pins -->
+                        <div class="map-pin" style="top: 38%; left: 24%;" onclick="selectRegion('Riau (Pelalawan & Dumai)', '590 Titik Panas', 'Kebakaran terjadi di lahan gambut kering. Asap mulai memengaruhi jarak pandang.', 'Siaga Darurat')"></div>
+                        <div class="map-pin" style="top: 50%; left: 45%;" onclick="selectRegion('Kalimantan Tengah (Palangka Raya)', '720 Titik Panas', 'Titik api meluas di kawasan eks-lahan gambut. Tim satgas darat sedang melakukan pemadaman.', 'Kritis')"></div>
+                        <div class="map-pin" style="top: 60%; left: 30%;" onclick="selectRegion('Sumatera Selatan (Ogan Komering Ilir)', '410 Titik Panas', 'Pembukaan lahan tidak terkontrol di musim kemarau panjang.', 'Waspada')"></div>
+                        <div class="map-pin" style="top: 40%; left: 36%;" onclick="selectRegion('Kalimantan Barat (Ketapang)', '430 Titik Panas', 'Kebakaran semak belukar pada area konsesi perkebunan.', 'Waspada')"></div>
+                    </div>
+
+                    <div>
+                        <div class="region-box" id="regionDetail">
+                            <h3 id="detTitle" style="color: var(--primary); font-size: 15px; margin-bottom: 8px;">📍 Pilih Wilayah pada Peta</h3>
+                            <p id="detDesc" style="color: var(--text-muted); font-size: 13px; line-height: 1.5;">
+                                Informasi lengkap mengenai status titik api, penanganan satgas, dan tingkat bahaya asap akan muncul di sini.
+                            </p>
+                            <div id="detBadge" style="margin-top: 12px; display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; background: rgba(255,170,0,0.2); color: #ffcc00;">
+                                Menunggu Pilihan
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 2: EDUKASI KARHUTLA ================= -->
+        <div class="tab-pane" id="tab-edukasi">
+            <div class="panel">
+                <h2><i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> Apa itu Karhutla & Bagaimana Cara Mencegahnya?</h2>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">
+                    Kebakaran Hutan dan Lahan (Karhutla) adalah bencana tahunan yang berdampak besar bagi kesehatan dan lingkungan. Kenali penyebab dan langkah pencegahannya secara mudah.
+                </p>
+
+                <div class="edu-grid">
+                    <div class="edu-box">
+                        <h4><i class="fa-solid fa-fire" style="color: var(--danger);"></i> Penyebab Utama</h4>
+                        <p>Sebagian besar karhutla disebabkan oleh faktor manusia, seperti pembukaan lahan dengan cara membakar secara sembarangan, serta cuaca ekstrem kemarau panjang (El Nino) yang membuat lahan gambut sangat kering.</p>
+                    </div>
+                    <div class="edu-box">
+                        <h4><i class="fa-solid fa-lungs-virus" style="color: var(--warning);"></i> Dampak bagi Kesehatan</h4>
+                        <p>Asap tebal mengandung partikel berbahaya (PM2.5) yang dapat menyebabkan Infeksi Saluran Pernapasan Akut (ISPA), iritasi mata, dan gangguan jantung bagi kelompok rentan seperti anak-anak dan lansia.</p>
+                    </div>
+                    <div class="edu-box">
+                        <h4><i class="fa-solid fa-hands-holding-child" style="color: var(--success);"></i> Peran Kita Bersama</h4>
+                        <p>Tidak membakar sampah atau lahan di musim kemarau, segera laporkan jika melihat titik api kecil, serta selalu pantau kualitas udara sebelum beraktivitas di luar ruangan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 3: CEK RISIKO UDARA ================= -->
+        <div class="tab-pane" id="tab-simulasi">
+            <div class="panel">
+                <h2><i class="fa-solid fa-calculator" style="color: var(--primary);"></i> Kalkulator Risiko Kualitas Udara</h2>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">
+                    Kalkulator ini membantu Anda memperkirakan seberapa sehat udara di sekitar Anda berdasarkan perkiraan titik api terdekat.
+                </p>
+
+                <div class="sim-grid">
+                    <div>
+                        <label class="form-label">Jumlah Titik Api dalam Radius 50 KM:</label>
+                        <input type="number" id="inputHotspots" class="form-input" value="30" min="1" max="300">
+
+                        <label class="form-label">Kecepatan Angin (KM/Jam):</label>
+                        <input type="number" id="inputWind" class="form-input" value="10" min="1" max="50">
+
+                        <button class="btn-primary" onclick="hitungRisiko()"><i class="fa-solid fa-bolt"></i> Hitung Tingkat Bahaya</button>
+                    </div>
+
+                    <div class="result-box">
+                        <span style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Hasil Estimasi ISPU:</span>
+                        <div id="hasilAngka" style="font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; color: var(--warning); margin: 10px 0;">
+                            145 (Tidak Sehat)
+                        </div>
+                        <p id="hasilSaran" style="font-size: 13px; color: #cbd5e1; line-height: 1.6;">
+                            Gunakan masker pelindung saat keluar rumah dan kurangi aktivitas fisik berat di luar ruangan.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 4: LAPOR TITIK API ================= -->
+        <div class="tab-pane" id="tab-lapor">
+            <div class="panel">
+                <h2><i class="fa-solid fa-bullhorn" style="color: var(--primary);"></i> Posko Cepat Tanggap Laporan Warga</h2>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+                    Melihat kepulan asap atau titik api di daerah Anda? Laporkan segera agar dapat diteruskan ke posko penanggulangan terdekat.
+                </p>
+
+                <input type="text" id="laporNama" class="form-input" placeholder="Nama Anda / Nomor Kontak">
+                <input type="text" id="laporLokasi" class="form-input" placeholder="Lokasi Kejadian (Desa, Kecamatan, Kabupaten)">
+                <textarea id="laporPesan" class="form-input" rows="3" placeholder="Jelaskan kondisi titik api atau kepulan asap yang terlihat..."></textarea>
+                <button class="btn-primary" onclick="kirimLaporan()"><i class="fa-solid fa-paper-plane"></i> Kirim Laporan Darurat</button>
+
+                <h3 style="font-size: 14px; color: #fff; margin-top: 24px; margin-bottom: 10px;">Daftar Laporan Masuk Terbaru:</h3>
+                <div class="report-list" id="reportBox"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Tab Switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+        }
+
+        // Region Click Info
+        function selectRegion(title, hotspotCount, desc, status) {
+            document.getElementById('detTitle').innerHTML = `📍 ${title}`;
+            document.getElementById('detDesc').innerHTML = `<strong>${hotspotCount}</strong><br><br>${desc}`;
+            
+            const badge = document.getElementById('detBadge');
+            badge.innerHTML = `Status: ${status}`;
+            if(status.includes('Kritis') || status.includes('Darurat')) {
+                badge.style.background = 'rgba(255,51,51,0.2)';
+                badge.style.color = '#ff6666';
+            } else {
+                badge.style.background = 'rgba(255,170,0,0.2)';
+                badge.style.color = '#ffcc00';
+            }
+        }
+
+        // Kalkulator Risiko Udara Sederhana
+        function hitungRisiko() {
+            const h = parseInt(document.getElementById('inputHotspots').value) || 10;
+            const w = parseInt(document.getElementById('inputWind').value) || 10;
+            
+            let skor = Math.round((h * 4) / (w * 0.25 + 1) + 35);
+            if(skor > 300) skor = 300;
+
+            const angkaElem = document.getElementById('hasilAngka');
+            const saranElem = document.getElementById('hasilSaran');
+
+            if(skor <= 50) {
+                angkaElem.innerHTML = `${skor} (Baik)`;
+                angkaElem.style.color = '#00e676';
+                saranElem.innerHTML = 'Kualitas udara bersih. Sangat aman untuk beraktivitas di luar ruangan.';
+            } else if(skor <= 100) {
+                angkaElem.innerHTML = `${skor} (Sedang)`;
+                angkaElem.style.color = '#ffaa00';
+                saranElem.innerHTML = 'Kualitas udara masih dapat diterima, namun sensitif bagi sebagian orang.';
+            } else if(skor <= 200) {
+                angkaElem.innerHTML = `${skor} (Tidak Sehat)`;
+                angkaElem.style.color = '#ff6b00';
+                saranElem.innerHTML = 'Disarankan menggunakan masker saat keluar rumah dan kurangi aktivitas berat di luar ruangan.';
+            } else {
+                angkaElem.innerHTML = `${skor} (Sangat Tidak Sehat / Berbahaya)`;
+                angkaElem.style.color = '#ff3333';
+                saranElem.innerHTML = 'Udara berbahaya! Wajib menggunakan masker pelindung, tutup rapat ventilasi rumah, dan hindari ke luar rumah.';
+            }
+        }
+
+        // Laporan Warga LocalStorage
+        function kirimLaporan() {
+            const nama = document.getElementById('laporNama').value.trim();
+            const lokasi = document.getElementById('laporLokasi').value.trim();
+            const pesan = document.getElementById('laporPesan').value.trim();
+
+            if(nama && lokasi && pesan) {
+                let data = JSON.parse(localStorage.getItem('karhutla_reports_v5') || '[]');
+                data.unshift({ nama, lokasi, pesan, waktu: new Date().toLocaleTimeString() });
+                localStorage.setItem('karhutla_reports_v5', JSON.stringify(data));
+                muatLaporan(data);
+
+                document.getElementById('laporNama').value = '';
+                document.getElementById('laporLokasi').value = '';
+                document.getElementById('laporPesan').value = '';
+                alert('Laporan berhasil dikirim dan tersimpan di sistem darurat lokal.');
+            } else {
+                alert('Mohon lengkapi semua kolom laporan terlebih dahulu.');
+            }
+        }
+
+        function muatLaporan(arr) {
+            const box = document.getElementById('reportBox');
+            box.innerHTML = '';
+            if(arr.length === 0) {
+                box.innerHTML = `<p style="color: var(--text-muted); font-size: 13px;">Belum ada laporan masuk.</p>`;
+                return;
+            }
+            arr.forEach(item => {
+                box.innerHTML += `
+                    <div class="report-item">
+                        <strong><i class="fa-solid fa-user-circle"></i> ${item.nama} (${item.lokasi}) - <span style="color: var(--text-muted); font-weight: 400;">${item.waktu}</span></strong>
+                        ${item.pesan}
+                    </div>
+                `;
+            });
+        }
+
+        window.onload = function() {
+            let data = JSON.parse(localStorage.getItem('karhutla_reports_v5') || '[]');
+            if(data.length === 0) {
+                data = [
+                    { nama: 'Budi Santoso', lokasi: 'Kec. Pelalawan, Riau', pesan: 'Terlihat kepulan asap tebal mengarah ke pemukiman warga.', waktu: '09:15' }
+                ];
+                localStorage.setItem('karhutla_reports_v5', JSON.stringify(data));
+            }
+            muatLaporan(data);
+        };
+    </script>
+</body>
+</html>
